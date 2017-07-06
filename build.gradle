@@ -1,0 +1,38 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+
+sourceCompatibility = 1.8
+
+test {
+    beforeTest { descriptor ->
+        logger.lifecycle("Running: " + descriptor)
+    }
+}
+
+test {
+    useTestNG()
+    systemProperty("io.LEVEL", "DEBUG")
+}
+
+
+dependencies {
+    compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
+    compile 'com.datastax.cassandra:cassandra-driver-extras:3.2.0'
+
+    testCompile 'org.testng:testng:6.8'
+
+    testCompile 'org.slf4j:slf4j-simple:1.7.19'
+
+    testCompile 'org.mockito:mockito-core:2.0.40-beta'
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
